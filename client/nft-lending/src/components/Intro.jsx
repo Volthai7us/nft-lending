@@ -8,10 +8,12 @@ import Loan from '../pages/Loan'
 import Home from '../pages/Home'
 
 const Intro = ({ account }) => {
+    console.log(account)
+
     return (
         <div>
             <Riddles />
-            <Loan account={account} />
+            {account.length > 0 && <Loan account={account} />}
             <About />
             <Home />
             <How />
