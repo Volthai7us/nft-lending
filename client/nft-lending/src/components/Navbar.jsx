@@ -30,19 +30,21 @@ const Navbar = ({ setAccount }) => {
         <nav class="sticky top-0 z-50">
             <div class="flex justify-center items-center bg-[#181412] text-black relative shadow-sm space-x-16" role="navigation">
                 <div class="px-4 cursor-pointer">
-                    <img width="150" src={logo} alt="logo" />
+                    <a href="/">
+                        <img width="150" src={logo} alt="logo" />
+                    </a>
                 </div>
                 <div class="space-x-16 md:block hidden">
-                    <a href="#" class="p-4 text-white">
+                    <a href="/" class="p-4 text-white">
                         Home
                     </a>
-                    <a href="#" class="p-4 text-white">
+                    <a href="/Borrow" class="p-4 text-white">
                         Borrow
                     </a>
-                    <a href="#" class="p-4 text-white">
+                    <a href="/Lend" class="p-4 text-white">
                         Lend
                     </a>
-                    <a href="#" class="p-4 text-white">
+                    <a href="/Dashboard" class="p-4 text-white">
                         Dashboard
                     </a>
                     {localaccount.length <= 0 ? (

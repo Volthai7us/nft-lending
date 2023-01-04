@@ -2,7 +2,33 @@ import '../tail.css'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 
-const LoanTerms = ({ step, setStep, setNftList, account, setImages }) => {
+const LoanTerms = ({ step, setStep, setNftList, account, setImages, loanTerms, setLoanTerms }) => {
+    useEffect(() => {
+        getAllNfts(account)
+    }, [account])
+
+    const confirmTerms = async () => {
+        const aprConverted = Number.parseFloat(loanTerms.apr.toString().substring(0, loanTerms.apr.toString().indexOf('%')))
+        const amountConverted = Number.parseFloat(loanTerms.amount.toString().substring(0, loanTerms.amount.toString().indexOf('ETH')))
+        const durationConverted = Number.parseFloat(loanTerms.duration.toString().substring(0, loanTerms.duration.toString().indexOf('Days'))) * 86400
+        setLoanTerms({
+            ...loanTerms,
+            apr: aprConverted,
+            amount: amountConverted,
+            duration: durationConverted,
+        })
+        setStep(1)
+    }
+
+    const getJSON = async (url) => {
+        const response = await fetch(url)
+        if (!response.ok) {
+        }
+
+        const data = await response.json()
+        return data
+    }
+
     const getAllNfts = async (address) => {
         await axios
             .get(`http://localhost:3000/nfts?id=${address}`)
@@ -27,56 +53,49 @@ const LoanTerms = ({ step, setStep, setNftList, account, setImages }) => {
             })
     }
 
-    useEffect(() => {
-        getAllNfts(account)
-    }, [account])
-
-    const confirmTerms = async () => {
-        setStep(1)
-    }
-
-    const getJSON = async (url) => {
-        const response = await fetch(url)
-        if (!response.ok) {
-        }
-
-        const data = await response.json()
-        return data
-    }
-
     return (
-        <div class={`flex flex-col bg-black bg-opacity-50 w-[118rem] h-[20rem] mx-auto mb-[1rem] mt-auto rounded-[2rem] ${step === 0 ? 'visible' : 'hidden'}`}>
-            <div class="grid grid-cols-3 px-[7rem]">
-                <div class="flex flex-col">
-                    <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Asset type</p>
-                    <select class="bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5">
-                        <option class="text-white" value="Eth">
-                            Ethereum
-                        </option>
-                        <option value="E">EmirCoin</option>
-                    </select>
+        step === 0 && (
+            <div class={`flex flex-col bg-black bg-opacity-50 w-[118rem] h-[20rem] mx-auto mb-[1rem] mt-auto rounded-[2rem]`}>
+                <div class="grid grid-cols-3 px-[7rem]">
+                    <div class="flex flex-col">
+                        <p class="text-white text-3xl mt-[2rem] ml-[4rem]">APR</p>
+                        <input
+                            type="text"
+                            placeholder="10%"
+                            onChange={(e) => {
+                                setLoanTerms({ ...loanTerms, apr: e.target.value })
+                            }}
+                            class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
+                        ></input>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Loan amount</p>
+                        <input
+                            type="text"
+                            placeholder="50 ETH"
+                            onChange={(e) => {
+                                setLoanTerms({ ...loanTerms, amount: e.target.value })
+                            }}
+                            class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
+                        ></input>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Loan duration</p>
+                        <input
+                            type="text"
+                            placeholder="45 Days"
+                            onChange={(e) => {
+                                setLoanTerms({ ...loanTerms, duration: e.target.value })
+                            }}
+                            class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
+                        ></input>
+                    </div>
                 </div>
-                <div class="flex flex-col">
-                    <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Loan amount</p>
-                    <input
-                        type="text"
-                        placeholder="0"
-                        class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
-                    ></input>
-                </div>
-                <div class="flex flex-col">
-                    <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Loan duration</p>
-                    <input
-                        type="text"
-                        placeholder="45 days"
-                        class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
-                    ></input>
-                </div>
+                <button onClick={confirmTerms} class="text-white text-2xl w-[16rem] h-[4rem] mr-[2rem] ml-auto mb-[1rem] mt-auto col-start-3 bg-[#54B1BC] rounded-2xl ">
+                    Confirm loan terms
+                </button>
             </div>
-            <button onClick={confirmTerms} class="text-white text-2xl w-[16rem] h-[4rem] mr-[2rem] ml-auto mb-[1rem] mt-auto col-start-3 bg-[#54B1BC] rounded-2xl ">
-                Confirm loan terms
-            </button>
-        </div>
+        )
     )
 }
 

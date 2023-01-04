@@ -6,7 +6,6 @@ describe('Lending', () => {
 
     beforeEach(async () => {
         const accounts = await ethers.getSigners()
-        console.log(accounts)
         deployer = accounts[0]
         addr1 = accounts[1]
         addr2 = accounts[2]
@@ -110,11 +109,32 @@ describe('Lending', () => {
 
         it('Should send nft correctly on lending contract', async () => {
             await nft.mint(addr1.address)
+            await nft.connect(addr1).approve(lending.address, 0)
             await lending.connect(addr1).transferNFT(addr1.address, addr2.address, nft.address, 0)
             const amount = await lending.balanceOf(addr1.address, nft.address)
             expect(amount).to.equal(0)
             const amount2 = await lending.balanceOf(addr2.address, nft.address)
             expect(amount2).to.equal(1)
+        })
+
+        it('borrow, send nft, get back nft, withdraw eth', async () => {
+            await nft.mint(addr1.address)
+            await nft.connect(addr1).approve(lending.address, 0)
+            await lending.connect(addr1).borrow(nft.address, 0, 3000, 2, 2)
+            // await ethers.provider.send('evm_increaseTime', [3001])
+            // await ethers.provider.send('evm_mine')
+            // await lending.connect(addr1).getBackNFT(addr1.address, nft.address, 0)
+            // expect(await lending.connect(addr1).getBackNFT(addr1.address, nft.address, 0)).to.be.reverted()
+        })
+    })
+
+    describe('Get back nft', () => {
+        it('Should get back nft correctly', async () => {
+            await nft.mint(addr1.address)
+            await nft.connect(addr1).transferFrom(addr1.address, lending.address, 0)
+            await lending.connect(addr1).getBackNFT(addr1.address, nft.address, 0)
+            const amount = await lending.balanceOf(addr1.address, nft.address)
+            expect(amount).to.equal(1)
         })
     })
 })

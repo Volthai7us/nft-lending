@@ -2,6 +2,7 @@ import '../tail.css'
 import { useState, useEffect } from 'react'
 import LoanTerms from '../components/LoanTerms'
 import Collateral from '../components/Collateral'
+import SubmitLoan from '../components/SubmitLoan'
 
 const Loan = ({ account }) => {
     const [step, setStep] = useState(0)
@@ -12,10 +13,15 @@ const Loan = ({ account }) => {
         token_id: 0,
         token_address: '',
     })
+    const [loanTerms, setLoanTerms] = useState({
+        apr: 0,
+        amount: 0,
+        duration: 0,
+    })
 
     useEffect(() => {
-        console.log('Account: ', account)
-    }, [collateral])
+        console.log('Loan Terms: ', loanTerms)
+    }, [setLoanTerms])
 
     return (
         <div class="flex flex-col bg-black bg-opacity-50 w-[120rem] mx-auto mt-[5rem] rounded-[2rem] space-y-16 space-y-[8rem] mb-[4rem]">
@@ -47,7 +53,16 @@ const Loan = ({ account }) => {
                 </p>
             </div>
 
-            <LoanTerms step={step} setStep={setStep} nftList={nftList} setNftList={setNftList} account={account} setImages={setImages} />
+            <LoanTerms
+                step={step}
+                setStep={setStep}
+                nftList={nftList}
+                setNftList={setNftList}
+                account={account}
+                setImages={setImages}
+                loanTerms={loanTerms}
+                setLoanTerms={setLoanTerms}
+            />
 
             <Collateral
                 account={account}
@@ -60,6 +75,8 @@ const Loan = ({ account }) => {
                 setCollateral={setCollateral}
                 images={images}
             />
+
+            <SubmitLoan step={step} setStep={setStep} collateral={collateral} loanTerms={loanTerms} account={account} />
         </div>
     )
 }

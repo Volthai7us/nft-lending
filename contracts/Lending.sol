@@ -7,6 +7,10 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract Lending
 {
     struct Lend {
+        uint256 lendId;
+        address owner;
+        address contractAddress;
+        uint256 nftId;
         uint256 duration;
         uint256 APR;
         uint256 amount;
@@ -20,9 +24,12 @@ contract Lending
         uint256 amount;
     }
 
-    mapping(address => mapping(address => mapping(uint256 => Lend))) lendings;
-    mapping(address => mapping(uint256 => Lock)) locks;
-    mapping (address => uint256 ) lockCount;
+    mapping(address => mapping(address => mapping(uint256 => Lend))) public lendings;
+    mapping(address => mapping(uint256 => Lock)) public locks;
+    mapping (address => uint256 ) public lockCount;
+    Lend [] public lends;
+    uint256 public lendCount;
+
 
     receive() external payable {
     }
@@ -32,10 +39,25 @@ contract Lending
 
     function borrow(address contractAddress, uint256 nftId, uint256 duration, uint256 APR, uint256 amount) public {
         Lend memory lend;
+        lend.lendId = lendCount;
+        lend.owner = msg.sender;
+        lend.contractAddress = contractAddress;
+        lend.nftId = nftId;
         lend.duration = duration;
         lend.APR = APR;
         lend.amount = amount;
         lendings[msg.sender][contractAddress][nftId] = lend;
+        lends.push(lend);
+        lendCount++;
+        //ERC721(contractAddress).safeTransferFrom(msg.sender, address(this), nftId);
+    }
+
+    function getBackNft(address contractAddress, uint256 nftId) public {
+        Lend memory lend = lendings[msg.sender][contractAddress][nftId];
+        require(block.timestamp - lendings[msg.sender][contractAddress][nftId].duration > lend.duration, "Lend is not expired");
+        ERC721(contractAddress).safeTransferFrom(address(this), msg.sender, nftId);
+        delete lends[lendings[msg.sender][contractAddress][nftId].lendId];
+        delete lendings[msg.sender][contractAddress][nftId];
     }
 
     function lock(uint256 duration) public payable {
@@ -56,11 +78,6 @@ contract Lending
         lockCount[msg.sender]--;
     }
 
-    function transferNFT(address from, address to, address contractAddress, uint256 tokenId) public
-    {
-        ERC721(contractAddress).safeTransferFrom(from, to, tokenId);
-    }
-
     function balanceOf(address owner, address contractAddress) view public returns(uint256)
     {
         return ERC721(contractAddress).balanceOf(owner);
@@ -72,7 +89,7 @@ contract Lending
         return owner;
     }
 
-    function getLend(address owner, address contractAddress, uint256 nftId) view public returns(Lend memory lend) {
-        return lendings[owner][contractAddress][nftId];
+    function getLend(uint256 id) view public returns(Lend memory) {
+        return lends[id];
     }
 }

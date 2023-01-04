@@ -1,11 +1,11 @@
 import '../tail.css'
-import body2 from '../images/body_2.png'
 import Riddles from './Riddles'
 import About from './About'
 import How from './How'
 import Footer from './Footer'
 import Loan from '../pages/Loan'
 import Home from '../pages/Home'
+import Dashboard from '../pages/Dashboard'
 
 const Intro = ({ account }) => {
     console.log(account)
@@ -13,7 +13,6 @@ const Intro = ({ account }) => {
     return (
         <div>
             <Riddles />
-            {account.length > 0 && <Loan account={account} />}
             <About />
             <Home />
             <How />
