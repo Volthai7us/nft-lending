@@ -1,12 +1,10 @@
 import '../tail.css'
 import logo from '../images/logo.png'
-import { ethers } from 'ethers'
 import { useState } from 'react'
 import body1 from '../images/body_1.png'
 
 const Navbar = ({ setAccount }) => {
     const [connectButton, setConnectButton] = useState('Connect')
-    const [nftList, setNftList] = useState([])
     const [localaccount, setLocalAccount] = useState([])
 
     const connectWallet = async () => {
@@ -18,7 +16,6 @@ const Navbar = ({ setAccount }) => {
             }
             setConnectButton('Connected')
             const accounts = await window.ethereum.request({ method: 'eth_accounts' })
-            //getAllNfts(accounts[0])
             setLocalAccount(accounts[0])
             setAccount(accounts[0])
         } else {
@@ -38,11 +35,11 @@ const Navbar = ({ setAccount }) => {
                     <a href="/" class="p-4 text-white">
                         Home
                     </a>
-                    <a href="/Borrow" class="p-4 text-white">
-                        Borrow
-                    </a>
                     <a href="/Lend" class="p-4 text-white">
                         Lend
+                    </a>
+                    <a href="/Lock" class="p-4 text-white">
+                        Lock
                     </a>
                     <a href="/Dashboard" class="p-4 text-white">
                         Dashboard

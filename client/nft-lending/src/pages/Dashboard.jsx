@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { useState, useEffect } from 'react'
 import { lendingAddress, lendingAbi } from '../abi/lending'
+import abi from '../abi/erc721'
 
 const Dashboard = ({ account }) => {
     const [lendings, setLendings] = useState([
@@ -13,9 +14,11 @@ const Dashboard = ({ account }) => {
             noVote: 0,
             yesVote: 0,
             owner: '',
+            over: false,
         },
     ])
     const [loading, setLoading] = useState(true)
+    const [daoMember, setDaoMember] = useState(false)
 
     useEffect(() => {
         const getAllLending = async () => {
@@ -27,7 +30,9 @@ const Dashboard = ({ account }) => {
             const currentLendings = []
             for (let i = 0; i < count; i++) {
                 let lend = await lending.lends(i)
+                let isOver = await lending.IsVoteOver(i)
                 currentLendings.push({
+                    contractAddress: lend.contractAddress.toString(),
                     apr: lend.APR.toString(),
                     amount: lend.amount.toString(),
                     duration: lend.duration.toString(),
@@ -36,16 +41,55 @@ const Dashboard = ({ account }) => {
                     noVote: lend.noVote.toString(),
                     yesVote: lend.yesVote.toString(),
                     owner: lend.owner,
+                    over: isOver,
                 })
             }
             setLendings(currentLendings)
             setLoading(false)
-            console.log(lendings)
+        }
+
+        const isDaoMember = async (account) => {
+            setLoading(true)
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
+            let lending = new ethers.Contract(lendingAddress, lendingAbi, signer)
+            let isMember = await lending.GetMember(account)
+            setDaoMember(isMember)
+            setLoading(false)
         }
         getAllLending()
-    }, [setLendings])
+        isDaoMember(account)
+    }, [setLendings, setDaoMember])
 
-    if (loading) return <div class="text-5xl text-white text-center">Loading...</div>
+    const vote = async (lendId, vote) => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner(account)
+        let lending = new ethers.Contract(lendingAddress, lendingAbi, signer)
+        let tx = await lending.Vote(lendId, vote)
+        await tx.wait()
+        window.location.reload()
+    }
+
+    const borrow = async (lendId) => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner(account)
+        let lending = new ethers.Contract(lendingAddress, lendingAbi, signer)
+        let tx = await lending.Borrow(lendId)
+        await tx.wait()
+        window.location.reload()
+    }
+
+    const sendNft = async (contractAddress, tokenId) => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner(account)
+        let nft = new ethers.Contract(contractAddress, abi, signer)
+        let tx = await nft['safeTransferFrom(address,address,uint256)'](account, lendingAddress, tokenId, {
+            gasLimit: 1000000,
+        })
+        await tx.wait()
+    }
+
+    if (loading) return <div class="text-5xl text-black mt-[5rem] text-center">Loading...</div>
 
     return (
         <div class="flex flex-col w-[110rem] min-h-[30rem] bg-[#191920] bg-opacity-80 rounded-[2rem] px-[5rem] mx-auto my-[2rem] ">
@@ -60,6 +104,7 @@ const Dashboard = ({ account }) => {
                         <th class="px-6 py-3">Yes Vote</th>
                         <th class="px-6 py-3">No Vote</th>
                         <th class="px-6 py-3">Owner</th>
+                        {!daoMember ? <></> : <th class="px-6 py-3">Vote</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +118,39 @@ const Dashboard = ({ account }) => {
                                 <td class="px-6 py-3">{lending.apr}</td>
                                 <td class="px-6 py-3">{lending.yesVote}</td>
                                 <td class="px-6 py-3">{lending.noVote}</td>
-                                <td class="px-6 py-3">{lending.owner}</td>
+                                {lending.owner.toUpperCase() === account.toUpperCase() ? (
+                                    <td class="px-6 py-3">
+                                        {lending ? (
+                                            <div class="space-x-4">
+                                                <button
+                                                    class="px-6 py-3 bg-[#191920] text-white rounded-[1rem] px-[1rem] py-[0.5rem]"
+                                                    onClick={() => sendNft(lending.contractAddress, lending.nftId)}
+                                                >
+                                                    1. Send NFT
+                                                </button>
+                                                <button class="px-6 py-3 bg-[#191920] text-white rounded-[1rem] px-[1rem] py-[0.5rem]" onClick={(e) => borrow(lending.lendId)}>
+                                                    2. Borrow
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <span class="text-white text-2xl "> Vote is not over </span>
+                                        )}
+                                    </td>
+                                ) : (
+                                    <td class="px-6 py-3">{lending.owner}</td>
+                                )}
+                                {!daoMember ? (
+                                    <></>
+                                ) : (
+                                    <td class="px-6 py-3 flex space-x-4">
+                                        <button class="bg-[#191920] text-white rounded-[1rem] px-[1rem] py-[0.5rem]" onClick={(e) => vote(lending.lendId, true)}>
+                                            Yes
+                                        </button>
+                                        <button class="bg-[#191920] text-white rounded-[1rem] px-[1rem] py-[0.5rem]" onClick={(e) => vote(lending.lendId, false)}>
+                                            No
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         )
                     })}

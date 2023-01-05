@@ -1,6 +1,6 @@
 import '../tail.css'
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 const LoanTerms = ({ step, setStep, setNftList, account, setImages, loanTerms, setLoanTerms }) => {
     useEffect(() => {

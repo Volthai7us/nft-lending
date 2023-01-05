@@ -8,7 +8,7 @@ const SubmitLoan = ({ step, setStep, collateral, loanTerms, account }) => {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner(account)
         let lending = new ethers.Contract(lendingAddress, lendingAbi, signer)
-        await lending.borrow(collateral.token_address, collateral.token_id, loanTerms.duration, loanTerms.apr, loanTerms.amount)
+        await lending.BorrowRequest(collateral.token_address, collateral.token_id, loanTerms.duration, loanTerms.apr, loanTerms.amount)
     }
     const declineLoan = () => {
         setStep(1)

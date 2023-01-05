@@ -1,5 +1,10 @@
-const lendingAddress = '0x93a50B4AFd72FA41deC97BC2DFE80712f281924E'
+const lendingAddress = '0xF0Fb295e392ab095Ad3e19e8A14E034e6523B365'
 const lendingAbi = [
+    {
+        inputs: [],
+        stateMutability: 'nonpayable',
+        type: 'constructor',
+    },
     {
         stateMutability: 'payable',
         type: 'fallback',
@@ -8,31 +13,33 @@ const lendingAbi = [
         inputs: [
             {
                 internalType: 'address',
-                name: 'owner',
-                type: 'address',
-            },
-            {
-                internalType: 'address',
-                name: 'contractAddress',
+                name: 'member',
                 type: 'address',
             },
         ],
-        name: 'balanceOf',
-        outputs: [
+        name: 'AddMember',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
             {
                 internalType: 'uint256',
-                name: '',
+                name: 'lendId',
                 type: 'uint256',
             },
         ],
-        stateMutability: 'view',
+        name: 'Borrow',
+        outputs: [],
+        stateMutability: 'nonpayable',
         type: 'function',
     },
     {
         inputs: [
             {
                 internalType: 'address',
-                name: 'contractAddress',
+                name: 'nftContractAddress',
                 type: 'address',
             },
             {
@@ -47,7 +54,7 @@ const lendingAbi = [
             },
             {
                 internalType: 'uint256',
-                name: 'APR',
+                name: 'apr',
                 type: 'uint256',
             },
             {
@@ -56,38 +63,33 @@ const lendingAbi = [
                 type: 'uint256',
             },
         ],
-        name: 'borrow',
+        name: 'BorrowRequest',
         outputs: [],
         stateMutability: 'nonpayable',
         type: 'function',
     },
     {
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'contractAddress',
-                type: 'address',
-            },
+        inputs: [],
+        name: 'GetBalance',
+        outputs: [
             {
                 internalType: 'uint256',
-                name: 'nftId',
+                name: '',
                 type: 'uint256',
             },
         ],
-        name: 'getBackNft',
-        outputs: [],
-        stateMutability: 'nonpayable',
+        stateMutability: 'view',
         type: 'function',
     },
     {
         inputs: [
             {
                 internalType: 'uint256',
-                name: 'id',
+                name: 'lendId',
                 type: 'uint256',
             },
         ],
-        name: 'getLend',
+        name: 'GetLend',
         outputs: [
             {
                 components: [
@@ -118,6 +120,16 @@ const lendingAbi = [
                     },
                     {
                         internalType: 'uint256',
+                        name: 'deadline',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'requestTime',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
                         name: 'APR',
                         type: 'uint256',
                     },
@@ -136,6 +148,11 @@ const lendingAbi = [
                         name: 'noVote',
                         type: 'uint256',
                     },
+                    {
+                        internalType: 'bool',
+                        name: 'isBorrowed',
+                        type: 'bool',
+                    },
                 ],
                 internalType: 'struct Lending.Lend',
                 name: '',
@@ -147,7 +164,7 @@ const lendingAbi = [
     },
     {
         inputs: [],
-        name: 'lendCount',
+        name: 'GetLendCount',
         outputs: [
             {
                 internalType: 'uint256',
@@ -161,10 +178,178 @@ const lendingAbi = [
     {
         inputs: [
             {
+                internalType: 'uint256',
+                name: 'lockId',
+                type: 'uint256',
+            },
+        ],
+        name: 'GetLock',
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: 'uint256',
+                        name: 'lockId',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'address',
+                        name: 'owner',
+                        type: 'address',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'deadline',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'duration',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'amount',
+                        type: 'uint256',
+                    },
+                ],
+                internalType: 'struct Lending.Lock',
+                name: '',
+                type: 'tuple',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'member',
+                type: 'address',
+            },
+        ],
+        name: 'GetMember',
+        outputs: [
+            {
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: 'lendId',
+                type: 'uint256',
+            },
+        ],
+        name: 'IsVoteOver',
+        outputs: [
+            {
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: 'duration',
+                type: 'uint256',
+            },
+        ],
+        name: 'LockEth',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'member',
+                type: 'address',
+            },
+        ],
+        name: 'RemoveMember',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: 'lendId',
+                type: 'uint256',
+            },
+            {
+                internalType: 'bool',
+                name: 'vote',
+                type: 'bool',
+            },
+        ],
+        name: 'Vote',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: 'lockId',
+                type: 'uint256',
+            },
+        ],
+        name: 'WithdrawEth',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: 'lendId',
+                type: 'uint256',
+            },
+        ],
+        name: 'WithdrawNft',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
                 internalType: 'address',
                 name: '',
                 type: 'address',
             },
+        ],
+        name: 'daoMembers',
+        outputs: [
+            {
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
             {
                 internalType: 'address',
                 name: '',
@@ -176,51 +361,43 @@ const lendingAbi = [
                 type: 'uint256',
             },
         ],
-        name: 'lendings',
+        name: 'daoVotes',
+        outputs: [
+            {
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        name: 'durationToApr',
         outputs: [
             {
                 internalType: 'uint256',
-                name: 'lendId',
+                name: '',
                 type: 'uint256',
             },
-            {
-                internalType: 'address',
-                name: 'owner',
-                type: 'address',
-            },
-            {
-                internalType: 'address',
-                name: 'contractAddress',
-                type: 'address',
-            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'lendCount',
+        outputs: [
             {
                 internalType: 'uint256',
-                name: 'nftId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'uint256',
-                name: 'duration',
-                type: 'uint256',
-            },
-            {
-                internalType: 'uint256',
-                name: 'APR',
-                type: 'uint256',
-            },
-            {
-                internalType: 'uint256',
-                name: 'amount',
-                type: 'uint256',
-            },
-            {
-                internalType: 'uint256',
-                name: 'yesVote',
-                type: 'uint256',
-            },
-            {
-                internalType: 'uint256',
-                name: 'noVote',
+                name: '',
                 type: 'uint256',
             },
         ],
@@ -264,6 +441,16 @@ const lendingAbi = [
             },
             {
                 internalType: 'uint256',
+                name: 'deadline',
+                type: 'uint256',
+            },
+            {
+                internalType: 'uint256',
+                name: 'requestTime',
+                type: 'uint256',
+            },
+            {
+                internalType: 'uint256',
                 name: 'APR',
                 type: 'uint256',
             },
@@ -282,31 +469,17 @@ const lendingAbi = [
                 name: 'noVote',
                 type: 'uint256',
             },
+            {
+                internalType: 'bool',
+                name: 'isBorrowed',
+                type: 'bool',
+            },
         ],
         stateMutability: 'view',
         type: 'function',
     },
     {
-        inputs: [
-            {
-                internalType: 'uint256',
-                name: 'duration',
-                type: 'uint256',
-            },
-        ],
-        name: 'lock',
-        outputs: [],
-        stateMutability: 'payable',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'address',
-                name: '',
-                type: 'address',
-            },
-        ],
+        inputs: [],
         name: 'lockCount',
         outputs: [
             {
@@ -321,11 +494,6 @@ const lendingAbi = [
     {
         inputs: [
             {
-                internalType: 'address',
-                name: '',
-                type: 'address',
-            },
-            {
                 internalType: 'uint256',
                 name: '',
                 type: 'uint256',
@@ -335,7 +503,17 @@ const lendingAbi = [
         outputs: [
             {
                 internalType: 'uint256',
-                name: 'lockingTime',
+                name: 'lockId',
+                type: 'uint256',
+            },
+            {
+                internalType: 'address',
+                name: 'owner',
+                type: 'address',
+            },
+            {
+                internalType: 'uint256',
+                name: 'deadline',
                 type: 'uint256',
             },
             {
@@ -350,43 +528,6 @@ const lendingAbi = [
             },
         ],
         stateMutability: 'view',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'contractAddress',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'nftId',
-                type: 'uint256',
-            },
-        ],
-        name: 'ownerOf',
-        outputs: [
-            {
-                internalType: 'address',
-                name: '',
-                type: 'address',
-            },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'uint256',
-                name: 'lockId',
-                type: 'uint256',
-            },
-        ],
-        name: 'withdraw',
-        outputs: [],
-        stateMutability: 'nonpayable',
         type: 'function',
     },
     {

@@ -43,7 +43,7 @@ const Loan = ({ account }) => {
                             <span class="text-white">Please specify the asset you want to borrow and the loan duration.</span>
                             <br />
                             <br />
-                            The asset type and amount you choose are only the desired terms. They might differ based on the offers you choose to accept.
+                            You should write terms as shown in the placeholder.
                         </span>
                     ) : step === 1 ? (
                         'Please choose an asset or multiple assets that you would like to use as collateral for your loan'
