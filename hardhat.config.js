@@ -11,6 +11,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY
 const GANACHE_PRIVATE_KEY = process.env.GANACHE_PRIVATE_KEY
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
+const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -38,6 +39,12 @@ module.exports = {
             blockConfirmations: 3,
             url: 'http://172.24.176.1:3434',
             accounts: [GANACHE_PRIVATE_KEY],
+        },
+        mumbai: {
+            chainId: 80001,
+            blockConfirmations: 3,
+            url: MUMBAI_RPC_URL,
+            accounts: [PRIVATE_KEY],
         },
     },
     namedAccounts: {

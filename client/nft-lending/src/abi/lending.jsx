@@ -1,4 +1,4 @@
-const lendingAddress = '0xF0Fb295e392ab095Ad3e19e8A14E034e6523B365'
+const lendingAddress = '0xA219C645bdD41aC79Bd1AEc4dC91A563ADe648E8'
 const lendingAbi = [
     {
         inputs: [],

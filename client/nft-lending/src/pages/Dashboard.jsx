@@ -110,7 +110,7 @@ const Dashboard = ({ account }) => {
                 <tbody>
                     {lendings.map((lending, i) => {
                         return (
-                            <tr key={i}>
+                            <tr class="border bg-opacity-20 my-1" key={i}>
                                 <td class="px-6 py-3">{lending.lendId}</td>
                                 <td class="px-6 py-3">{lending.nftId}</td>
                                 <td class="px-6 py-3">{lending.amount}</td>
@@ -120,7 +120,7 @@ const Dashboard = ({ account }) => {
                                 <td class="px-6 py-3">{lending.noVote}</td>
                                 {lending.owner.toUpperCase() === account.toUpperCase() ? (
                                     <td class="px-6 py-3">
-                                        {lending ? (
+                                        {lending.over ? (
                                             <div class="space-x-4">
                                                 <button
                                                     class="px-6 py-3 bg-[#191920] text-white rounded-[1rem] px-[1rem] py-[0.5rem]"

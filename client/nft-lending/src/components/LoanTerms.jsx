@@ -9,7 +9,7 @@ const LoanTerms = ({ step, setStep, setNftList, account, setImages, loanTerms, s
 
     const confirmTerms = async () => {
         const aprConverted = Number.parseFloat(loanTerms.apr.toString().substring(0, loanTerms.apr.toString().indexOf('%')))
-        const amountConverted = Number.parseFloat(loanTerms.amount.toString().substring(0, loanTerms.amount.toString().indexOf('ETH')))
+        const amountConverted = Number.parseFloat(loanTerms.amount.toString().substring(0, loanTerms.amount.toString().indexOf('MATIC')))
         const durationConverted = Number.parseFloat(loanTerms.duration.toString().substring(0, loanTerms.duration.toString().indexOf('Days'))) * 86400
         setLoanTerms({
             ...loanTerms,
@@ -72,11 +72,11 @@ const LoanTerms = ({ step, setStep, setNftList, account, setImages, loanTerms, s
                         <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Loan amount</p>
                         <input
                             type="text"
-                            placeholder="50 ETH"
+                            placeholder="50 MATIC"
                             onChange={(e) => {
                                 setLoanTerms({ ...loanTerms, amount: e.target.value })
                             }}
-                            class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
+                            class="placeholder-white px-4 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
                         ></input>
                     </div>
                     <div class="flex flex-col">

@@ -25,7 +25,7 @@ const SubmitLock = ({ step, setStep, lockTerms, account }) => {
                         </div>
                         <div>
                             <span class="text-white text-2xl"> Amount: </span>
-                            <span class="text-white text-2xl"> {lockTerms.amount} ETH </span>
+                            <span class="text-white text-2xl"> {lockTerms.amount} MATIC </span>
                         </div>
                         <div>
                             <span class="text-white text-2xl"> Duration: </span>

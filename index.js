@@ -7,7 +7,7 @@ const { EvmChain } = require('@moralisweb3/common-evm-utils')
 require('dotenv').config()
 
 const getAllNfts = async (address) => {
-    const chain = EvmChain.GOERLI
+    const chain = EvmChain.MUMBAI
 
     const response = await Moralis.EvmApi.nft.getWalletNFTs({
         address,

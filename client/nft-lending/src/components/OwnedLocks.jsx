@@ -54,10 +54,10 @@ const OwnedLocks = ({ account }) => {
         <div class="px-[2rem] py-[2rem] grid grid-cols-4 grid-4">
             {locks.map((lock, i) => {
                 return (
-                    <div key={i} class="flex flex-col bg-black bg-opacity-50 min-w-[20rem] mx-auto p-[2rem]">
+                    <div key={i} class="flex flex-col bg-black bg-opacity-50 min-w-[20rem] mx-auto p-[2rem] space-y-4">
                         <span class="text-white text-3xl"> Lock ID: {lock.id}</span>
                         <span class="text-white text-3xl"> Duration: {lock.duration / 86400} Days</span>
-                        <span class="text-white text-3xl"> Amount: {lock.amount / 1000000000000000000} ETH</span>
+                        <span class="text-white text-3xl"> Amount: {lock.amount / 1000000000000000000} MATIC</span>
                         <button class="text-white text-3xl bg-[#E5C091] rounded-full w-[10rem] mx-auto mt-[2rem]" onClick={(e) => WithdrawEth(lock.id)}>
                             Collect
                         </button>

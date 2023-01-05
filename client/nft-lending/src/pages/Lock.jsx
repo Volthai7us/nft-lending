@@ -15,6 +15,7 @@ const Lock = ({ account }) => {
     return (
         <div class="flex flex-col bg-black bg-opacity-50 w-[120rem] mx-auto mt-[5rem] rounded-[2rem] space-y-16 space-y-[8rem] mb-[4rem]">
             <OwnedLocks account={account} />
+
             <div class="flex flex-row bg-black bg-opacity-50 w-[120rem] h-[5rem] mx-auto rounded-[2rem]">
                 <p class="text-[#E5C091] text-4xl my-auto ml-[4rem]">Choose lock terms</p>
                 <p class="text-white text-4xl ml-auto mr-[4rem] align-baseline my-auto">

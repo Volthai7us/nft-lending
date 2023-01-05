@@ -14,7 +14,7 @@ const LoanTerms = ({ step, setStep, account, lockTerms, setLockTerms }) => {
     }
 
     const confirmTerms = async () => {
-        const amountConverted = Number.parseFloat(lockTerms.amount.toString().substring(0, lockTerms.amount.toString().indexOf('ETH')))
+        const amountConverted = Number.parseFloat(lockTerms.amount.toString().substring(0, lockTerms.amount.toString().indexOf('MATIC')))
         const durationConverted = Number.parseFloat(lockTerms.duration.toString().substring(0, lockTerms.duration.toString().indexOf('Days'))) * 86400
         const aprConverted = Number.parseFloat(durationToApr(lockTerms.duration).toString().substring(0, durationToApr(lockTerms.duration).toString().indexOf('%')))
         setLockTerms({
@@ -50,18 +50,18 @@ const LoanTerms = ({ step, setStep, account, lockTerms, setLockTerms }) => {
                             placeholder="10%"
                             disabled={true}
                             value={durationToApr(lockTerms.duration)}
-                            class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
+                            class="placeholder-white px-4 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
                         ></input>
                     </div>
                     <div class="flex flex-col">
                         <p class="text-white text-3xl mt-[2rem] ml-[4rem]">Loan amount</p>
                         <input
                             type="text"
-                            placeholder="50 ETH"
+                            placeholder="50 MATIC"
                             onChange={(e) => {
                                 setLockTerms({ ...lockTerms, amount: e.target.value })
                             }}
-                            class="placeholder-white px-8 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
+                            class="placeholder-white px-4 bg-[#58504C] bg-opacity-60 text-white w-[8rem] ml-[5rem] mt-[2rem] rounded-lg block py-2.5"
                         ></input>
                     </div>
                 </div>
