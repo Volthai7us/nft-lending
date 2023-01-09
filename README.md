@@ -1,7 +1,7 @@
-#Introduction
+# Introduction
 Welcome to our project, a decentralized, peer-to-peer platform that allows NFT owners to borrow against their NFTs without having to sell them. By leveraging the power of DeFi and the Polygon network, we are creating a safe and secure platform that benefits both NFT owners and lenders.
 
-#Getting Started
+# Getting Started
 To get started with our project, follow these steps:
 
 Visit [insert website] to create an account.
